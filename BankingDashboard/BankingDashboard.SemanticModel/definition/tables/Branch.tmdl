@@ -1,0 +1,72 @@
+table Branch
+	lineageTag: 87fd0cfc-8097-425d-80d5-a5eb3c03b33b
+
+	column BranchID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 361d262c-17be-4ecb-a0f8-6b514ab00428
+		summarizeBy: none
+		sourceColumn: BranchID
+
+	column BranchName
+		dataType: string
+		lineageTag: 4f0ccf35-a61f-4b30-89bd-12fa0ffafb16
+		summarizeBy: none
+		sourceColumn: BranchName
+
+	column Country
+		dataType: string
+		lineageTag: a28d67c2-2043-4bbb-98f5-b31052b4e598
+		summarizeBy: none
+		sourceColumn: Country
+
+	column State
+		dataType: string
+		lineageTag: 8d1c00d8-79da-4457-a10d-d1c288a74d2e
+		summarizeBy: none
+		sourceColumn: State
+
+	column City
+		dataType: string
+		lineageTag: aff12f46-1eb8-4029-9f56-b22dd7cd29de
+		summarizeBy: none
+		sourceColumn: City
+
+	column Region
+		dataType: string
+		lineageTag: 29063e3d-27e1-4c45-9eb2-8e0e2a05346a
+		summarizeBy: none
+		sourceColumn: Region
+
+	hierarchy Geography
+		lineageTag: ec8d6e17-6fa7-4cb1-b4e5-082f863b86de
+
+		level Country
+			lineageTag: 1f355633-a737-4a8a-bf79-28feb6b662d4
+			column: Country
+
+		level State
+			lineageTag: a8ef3766-13a7-43a2-8fe4-2f4a866a07a1
+			column: State
+
+		level City
+			lineageTag: fdea2b00-4625-42a1-8298-f4938ad8c8eb
+			column: City
+
+		level BranchName
+			lineageTag: 1ef64efe-63b9-4f08-b00c-3f0d039cde8b
+			column: BranchName
+
+
+	partition Branch = m
+		mode: import
+		source =
+				let
+					Source = Json.Document(Binary.Decompress(Binary.FromText("lZJNTwIxEIb/StPzHlw/8aiYGDTgBjAeNhxe6WTbsLRmaOPfd7pEU0kwcup0ps98vNO2rSu9VDN0YF3piTcOci6xdb14TZLL2JL3cGItQopWr6r2vNJ34juZu6j0fKGaxNgepYLbviMGphK8rPT0Uc0DTME9gz0iNtm+J9+hT5xK6kreBKmFHMMp5HUe0FhiV1BTWDB2NvJwS9JnDr/RLmbmRnLBG8b/kdHQIHUIXjXgzVGySZ4K7jbrJOKmzkbV9FhTQT5Qb3ORGX2qHzvwfrD6TKakteir6lEBvcYIVg3D0M4OgDP4BcpHeeG1NGW+97BwotzHflNj8tJpf+Cd+EhZaRe8xHIW+TlPiYPvDl4Ok/0Jr74A", BinaryEncoding.Base64), Compression.Deflate)),
+					Table = Table.FromRows(Source, {"BranchID", "BranchName", "Country", "State", "City", "Region"}),
+					Typed = Table.TransformColumnTypes(Table, {{"BranchID", Int64.Type}, {"BranchName", type text}, {"Country", type text}, {"State", type text}, {"City", type text}, {"Region", type text}}, "en-US")
+				in
+					Typed
+
+	annotation PBI_ResultType = Table

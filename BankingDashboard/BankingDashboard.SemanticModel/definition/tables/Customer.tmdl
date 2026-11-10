@@ -1,0 +1,48 @@
+table Customer
+	lineageTag: 055978e2-dfc7-40f5-8687-6d2161b09637
+
+	column CustomerID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ca8d142d-28ac-4a7f-a956-81be5b1f973d
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+	column CustomerName
+		dataType: string
+		lineageTag: 6b9fae61-4aa5-4339-b869-7e4489446156
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+	column Gender
+		dataType: string
+		lineageTag: e7b59ce4-463b-4f18-a085-d3b385d39f3e
+		summarizeBy: none
+		sourceColumn: Gender
+
+	column City
+		dataType: string
+		lineageTag: e3a6f574-8c86-4ad4-b8cb-575154413600
+		summarizeBy: none
+		sourceColumn: City
+
+	column JoinDate
+		dataType: dateTime
+		formatString: dd-MMM-yyyy
+		lineageTag: 5d4645a1-caa8-4a79-bc26-fcce3e0ebeb5
+		summarizeBy: none
+		sourceColumn: JoinDate
+
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+					Source = Json.Document(Binary.Decompress(Binary.FromText("hVbJbtswEP0VQ2cREDctx7ZG0SB1EDhAL0EOLEJE9CIHcpQif98hKVIWacqADz7MaJa3DJ+fcZ6t1eeXWN0PR9FnefZTHsVBwp/vsnsTh6Ef4D8pCEFFjXCVveTPJM8e1EcLSU+t6I8CAjY250H+W63loVU2h6ICfo3OoXn22KuLOpt0FWKqsDz7Lfbn9qhWG9mdumQVyKkQoTqH59m3V/WhO1PdWzulPA6d9D25CiVEdzBI1JROFu+nXkZjVBAjZSdWW3FKDsFQQRDBOr528eGmpoagfYZwoaObPNuKdjis7r7kDIsfrew6ofznMcK1TsAFfOl02onVWpwTH6eIEBOL/XJs8/7r1/aJS5MDUN+L/qNV+3BHm+H4V6jLKgYBDED/UfteHKeRfaHLHDqNjZmbeyt2qXjDjMLW4B64GwS0qzJg49I3FlS53BYuoC0TXvltPQiVBsMS1rZVO46H8EW7smTCgPdTJ2EMR/CU+CjCeByeFHrY7rTzFF9QbIOIqUSwl2w4Tcz1eiQMAfDXUr6LfdxfhAy2zVFfxxIyyWDiMphbWghl0BhUKV0Ojxq7JnOMiCExAeR/iV6d29VWvr5+LVAfGuOIGuUSTYB+N3RXeBy1huHHTVbt/DTQWASoZz9pXKGZp8SihARrpcCAp6GXMM9M9XEJZxMUa4F9qnl8VAE4Rmw8cRxbED0zgNh46jsa6ZU0Rp8CuN+d25uwU42IhZ3yyYyWB9diMaKnpRtklhD4UImIAY9WnijB+Yhp4vhLa6fhAPBoDrCWcbve5iM6htbSwCjmFhYLrjpLsvo1vGc4tLDN9SrQm/E8RpwWF+KtRAxzGU1dt/mCsfNgxhwc8wLXPKgwu2J8pIlbVSR0poVR2IFL7wsLA1h62ITKJ4SWPXMShohdUJ0yq1k/eLyerEntJ3bqasSAF9OVTo1swi3BOfanMAgPWUFH0DiZ3kg3pVeNMHAamWHSdNzTh3uwlwbRCSaajxaVfLhdnDNeumfPsugsFjalSu01wgKEak8A99pefh8a57S2xpvwnbt4auzDoSymp659myRvADVMfPkP", BinaryEncoding.Base64), Compression.Deflate)),
+					Table = Table.FromRows(Source, {"CustomerID", "CustomerName", "Gender", "City", "JoinDate"}),
+					Typed = Table.TransformColumnTypes(Table, {{"CustomerID", Int64.Type}, {"CustomerName", type text}, {"Gender", type text}, {"City", type text}, {"JoinDate", type date}}, "en-US")
+				in
+					Typed
+
+	annotation PBI_ResultType = Table
